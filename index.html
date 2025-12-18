@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>LYNAA`</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+/* ============ INTRO ============ */
+#intro{
+    height:100vh;
+    background:linear-gradient(135deg,#075e54,#25d366);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    color:white;
+}
+
+.intro-box{
+    text-align:center;
+    padding:30px;
+}
+
+.logo{
+    width:100px;
+    height:100px;
+    border-radius:50%;
+    margin-bottom:15px;
+    animation:pop 1s ease forwards;
+}
+
+@keyframes pop{
+    from{transform:scale(0); opacity:0}
+    to{transform:scale(1); opacity:1}
+}
+
+.intro-title{
+    font-size:24px;
+    font-weight:600;
+    margin-bottom:8px;
+    opacity:0;
+    animation:fadeUp .8s ease forwards;
+    animation-delay:.5s;
+}
+
+.intro-typing{
+    font-size:14px;
+    opacity:.9;
+    min-height:20px;
+    margin-bottom:25px;
+}
+
+@keyframes fadeUp{
+    from{opacity:0; transform:translateY(15px)}
+    to{opacity:1; transform:translateY(0)}
+}
+
+.intro-btn{
+    display:none;
+    background:white;
+    color:#075e54;
+    border:none;
+    padding:14px 35px;
+    border-radius:30px;
+    font-size:15px;
+    font-weight:600;
+    cursor:pointer;
+    box-shadow:0 6px 15px rgba(0,0,0,.25);
+}
+
+.intro-btn:active{
+    transform:scale(.95);
+}
+
+/* ============ CHAT PAGE ============ */
+#chatPage{
+    display:none;
+    background:#ece5dd;
+    height:100vh;
+}
+
+/* HEADER */
+.header{
+    background:#075e54;
+    color:white;
+    padding:14px;
+    display:flex;
+    align-items:center;
+}
+
+.header img{
+    width:42px;
+    height:42px;
+    border-radius:50%;
+    margin-right:10px;
+}
+
+.header h2{
+    font-size:16px;
+}
+
+/* CHAT */
+.chat{
+    padding:15px;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    padding-bottom:140px;
+}
+
+.bubble{
+    max-width:75%;
+    padding:12px 15px;
+    border-radius:15px;
+    font-size:14px;
+    animation:fade .3s ease forwards;
+}
+
+.left{background:white; align-self:flex-start;}
+.right{background:#dcf8c6; align-self:flex-end;}
+
+@keyframes fade{
+    from{opacity:0; transform:translateY(8px)}
+    to{opacity:1; transform:translateY(0)}
+}
+
+/* TYPING */
+.typing{
+    background:white;
+    width:55px;
+    padding:10px;
+    border-radius:15px;
+    display:flex;
+    gap:5px;
+}
+
+.dot{
+    width:7px;
+    height:7px;
+    background:#999;
+    border-radius:50%;
+    animation:blink 1.4s infinite both;
+}
+
+.dot:nth-child(2){animation-delay:.2s}
+.dot:nth-child(3){animation-delay:.4s}
+
+@keyframes blink{
+    0%{opacity:.2}
+    20%{opacity:1}
+    100%{opacity:.2}
+}
+
+/* DONE */
+.done-area{
+    position:fixed;
+    bottom:10px;
+    width:100%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:6px;
+    opacity:0;
+    pointer-events:none;
+    transition:.4s ease;
+}
+
+.done-area.show{
+    opacity:1;
+    pointer-events:auto;
+}
+
+.done-btn{
+    background:#25d366;
+    color:white;
+    border:none;
+    padding:12px 30px;
+    border-radius:25px;
+    font-size:14px;
+    font-weight:600;
+    cursor:pointer;
+}
+
+.footer-text{
+    font-size:12px;
+    color:#666;
+}
+</style>
+</head>
+<body>
+
+<!-- INTRO -->
+<div id="intro">
+    <div class="intro-box">
+        <img src="https://files.catbox.moe/prnefk.jpg" class="logo">
+        <div class="intro-title">LYNAA`</div>
+        <div class="intro-typing" id="typingText"></div>
+        <button class="intro-btn" id="startBtn" onclick="openChat()">Masuk Chat</button>
+    </div>
+</div>
+
+<!-- CHAT -->
+<div id="chatPage">
+    <div class="header">
+        <img src="https://files.catbox.moe/prnefk.jpg">
+        <h2>LYNAA`</h2>
+    </div>
+
+    <div class="chat" id="chat"></div>
+
+    <div class="done-area">
+        <button class="done-btn" onclick="doneBang()">Done kak</button>
+        <div class="footer-text">Pesan terenkripsi end-to-end 🔒</div>
+    </div>
+</div>
+
+<script>
+/* ===== INTRO TYPING ===== */
+const text = "Welcome to Official LYNAA`";
+let idx = 0;
+const typingEl = document.getElementById("typingText");
+const btn = document.getElementById("startBtn");
+
+function typingIntro(){
+    if(idx < text.length){
+        typingEl.innerHTML += text.charAt(idx);
+        idx++;
+        setTimeout(typingIntro, 80);
+    }else{
+        btn.style.display = "inline-block";
+    }
+}
+typingIntro();
+
+/* ===== OPEN CHAT ===== */
+function openChat(){
+    document.getElementById("intro").style.display = "none";
+    document.getElementById("chatPage").style.display = "block";
+    showMessage();
+}
+
+/* ===== CHAT LOGIC ===== */
+const chat = document.getElementById("chat");
+const messages = [
+    "Haloow 👋",
+    "JANGAN LUPA SAVE LYNAA` 🤏😙",
+    "REAL OWN S4NSZXMLSTR 🔥",
+    "Sudah Save? Klik Done Ya!"
+];
+
+let i = 0;
+
+function showTyping(){
+    const t = document.createElement("div");
+    t.className = "typing";
+    t.id = "typing";
+    t.innerHTML = `<div class="dot"></div><div class="dot"></div><div class="dot"></div>`;
+    chat.appendChild(t);
+    chat.scrollTop = chat.scrollHeight;
+}
+
+function removeTyping(){
+    const t = document.getElementById("typing");
+    if(t) t.remove();
+}
+
+function showMessage(){
+    if(i >= messages.length){
+        document.querySelector(".done-area").classList.add("show");
+        return;
+    }
+
+    showTyping();
+
+    setTimeout(()=>{
+        removeTyping();
+
+        const msg = document.createElement("div");
+        msg.className = "bubble left";
+        msg.innerText = messages[i];
+        chat.appendChild(msg);
+
+        chat.scrollTop = chat.scrollHeight;
+        i++;
+
+        setTimeout(showMessage, 900);
+    }, 1200);
+}
+
+function doneBang(){
+    const msg = document.createElement("div");
+    msg.className = "bubble right";
+    msg.innerText = "Done kak";
+    chat.appendChild(msg);
+
+    setTimeout(()=>{
+        window.location.href =
+        "https://wa.me/628813718550?text=HALO%20KAK%20LYNAA`%20SAVE%20AKU%20DONG%20%3E%3C";
+    }, 900);
+}
+</script>
+
+</body>
+</html>
